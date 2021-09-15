@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">DicodingSubmission2</string>
+    <string name="app_detail_user">User Detail</string>
+    <string name="search_title">Search user here</string>
+    <string name="name">Taylor Otwell</string>
+    <string name="username">username</string>
+    <string name="company">company</string>
+    <string name="location">location</string>
+    <string name="followers">Followers</string>
+    <string name="proximanovaregular">repository</string>
+    <string name="v7">7</string>
+    <string name="_15">7</string>
+    <string name="_17">17</string>
+    <string name="following">following</string>
+    <string name="follower">followers</string>
+    <string name="list_link">link</string>
+    <string name="list_name">list name</string>
+    <string name="double_back_pressed_to_exit">press again to exit app</string>
+    <string name="options_ln">Language</string>
+    <string name="user_app">Dicoding Submission 2</string>
+</resources>
