@@ -10,4 +10,7 @@
     <color name="colorGradientStart">#ffaf7b</color>
     <color name="colorGradientCenter">#d76d77</color>
     <color name="colorGradientEnd">#3a1c71</color>
+    <color name="colorGray">#626067</color>
+    <color name="colorGray_light">#D3D3D3</color>
+
 </resources>

@@ -8,5 +8,10 @@
         android:orderInCategory="101"
         android:title="@string/options_ln"
         app:showAsAction="always" />
-
+    <item
+        android:id="@+id/favorite"
+        android:icon="@drawable/ic_love"
+        android:orderInCategory="101"
+        android:title="@string/options_ln"
+        app:showAsAction="always" />
 </menu>

@@ -27,7 +27,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:fontFamily="@font/proximanovaregular"
-            android:text="username"
+            android:text="@string/username"
 
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/img_item_foto_user"

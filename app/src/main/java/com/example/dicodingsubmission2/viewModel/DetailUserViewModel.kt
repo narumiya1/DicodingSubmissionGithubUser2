@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.dicodingsubmission2.BuildConfig
 import com.example.dicodingsubmission2.models.DetailUser
 import com.example.dicodingsubmission2.models.User
 import com.example.dicodingsubmission2.network.RetrofitClient
@@ -19,7 +20,8 @@ class DetailUserViewModel : ViewModel() {
     val userDetailValue = MutableLiveData<DetailUser>()
 
     private val baseURL = "https://api.github.com/"
-    private val authToken = "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"
+//    private val authToken = "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"
+    private val authToken = BuildConfig.GITHUB_TOKEN
 
     val listFollowers = MutableLiveData<ArrayList<User>>()
     val listFollowing = MutableLiveData<ArrayList<User>>()
@@ -40,8 +42,8 @@ class DetailUserViewModel : ViewModel() {
                                 val userDetail = DetailUser()
                                 userDetail.id = dataJson.getInt("id")
                                 userDetail.login = dataJson.getString("login")
-                                userDetail.avatar_url = dataJson.getString("avatar_url")
-                                userDetail.html_url = dataJson.getString("html_url")
+                                userDetail.avatarUrl = dataJson.getString("avatar_url")
+                                userDetail.htmlUrl = dataJson.getString("html_url")
                                 userDetail.name = dataJson.getString("name")
                                 userDetail.company = dataJson.getString("company")
                                 userDetail.blog = dataJson.getString("blog")
@@ -54,8 +56,7 @@ class DetailUserViewModel : ViewModel() {
                                 userDetail.created_at = dataJson.getString("created_at")
                                 userDetail.updated_at = dataJson.getString("updated_at")
 
-                                var folw= dataJson.getInt("followers")
-                                var folwz= dataJson.getInt("following")
+                                val folw= dataJson.getInt("followers")
                                 Log.d(" "," "+folw)
 
                                 userDetailValue.postValue(userDetail)

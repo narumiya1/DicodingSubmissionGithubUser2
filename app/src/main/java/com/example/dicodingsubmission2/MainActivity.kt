@@ -1,45 +1,104 @@
 package com.example.dicodingsubmission2
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.CompoundButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.dicodingsubmission2.activities.FavoriteActivity
 import com.example.dicodingsubmission2.adapter.UserAdapter
 import com.example.dicodingsubmission2.databinding.ActivityMainBinding
 import com.example.dicodingsubmission2.models.User
+import com.example.dicodingsubmission2.preferences.SettingPreferences
 import com.example.dicodingsubmission2.viewModel.MainViewModel
+import com.example.dicodingsubmission2.viewModel.ViewModelFactory
+
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
 
     private var lisData : ArrayList<User> = ArrayList()
     private lateinit var adapter: UserAdapter
     private lateinit var mainBinding: ActivityMainBinding
-    private lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         mainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mainBinding.root)
 
         adapter = UserAdapter()
         adapter.notifyDataSetChanged()
+        val pref = SettingPreferences.getInstance(dataStore)
 
+        val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
+            MainViewModel::class.java
+        )
         mainBinding.recycleView.layoutManager = LinearLayoutManager(this)
         mainBinding.recycleView.adapter = adapter
+
+        /*
+        mainBinding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                mainBinding.searchUser.setBackgroundColor(-7829368  )
+                mainBinding.switchTheme.isChecked = true
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                mainBinding.switchTheme.isChecked = false
+            }
+        }
+
+        switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                mainBinding.searchUser.setBackgroundColor(-3355444)
+                switchTheme.isChecked = true
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                mainBinding.searchUser.setBackgroundColor(-256)
+                mainBinding.searchUser.solidColor
+
+                switchTheme.isChecked = false
+            }
+        }
 
         mainViewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(MainViewModel::class.java)
+        */
+
+        mainViewModel.getThemeSettings().observe(this,
+            { isDarkModeActive: Boolean ->
+                if (isDarkModeActive) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    mainBinding.switchTheme.isChecked = true
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    mainBinding.switchTheme.isChecked = false
+                }
+            })
+
+        mainBinding.switchTheme.setOnCheckedChangeListener { _: CompoundButton?, isChecked: Boolean ->
+            mainViewModel.saveThemeSetting(isChecked)
+        }
+
+
 
         mainBinding.searchUser.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener,
             android.widget.SearchView.OnQueryTextListener {
@@ -95,6 +154,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.change_ln -> startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+            R.id.favorite -> startActivity(Intent(this, FavoriteActivity::class.java ))
         }
         return super.onOptionsItemSelected(item)
     }

@@ -1,23 +1,25 @@
 package com.example.dicodingsubmission2.viewModel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import com.example.dicodingsubmission2.BuildConfig
 import com.example.dicodingsubmission2.models.User
 import com.example.dicodingsubmission2.network.RetrofitClient
+import com.example.dicodingsubmission2.preferences.SettingPreferences
 import com.google.gson.JsonElement
+import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Response
 
-class MainViewModel : ViewModel() {
+class MainViewModel(private val pref: SettingPreferences) : ViewModel() {
     val listUser = MutableLiveData<ArrayList<User>>()
 
     private val baseURL = "https://api.github.com/"
-    private val authToken = "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"
+//    private val authToken = "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"
+    private val authToken = BuildConfig.GITHUB_TOKEN
     var errorStatus = MutableLiveData<String?>()
 
     fun setUserList(username : String ){
@@ -34,6 +36,11 @@ class MainViewModel : ViewModel() {
                                 val jsonArrayItem: JSONArray = jsonObject.getJSONArray("items")
 
                                 val list = arrayListOf<User>()
+                                /*
+                                if (list.size==0){
+                                    errorStatus.value = "Null"
+                                }
+                                 */
                                 for (i in 0 until jsonArrayItem.length()) {
                                     val dataJSON = jsonArrayItem.getJSONObject(i)
                                     val user = User()
@@ -64,4 +71,14 @@ class MainViewModel : ViewModel() {
     fun getListUsers(): LiveData<ArrayList<User>> {
         return listUser
     }
+    fun getThemeSettings(): LiveData<Boolean> {
+        return pref.getThemeSetting().asLiveData()
+    }
+
+    fun saveThemeSetting(isDarkModeActive: Boolean) {
+        viewModelScope.launch {
+            pref.saveThemeSetting(isDarkModeActive)
+        }
+    }
+
 }

@@ -3,8 +3,8 @@ package com.example.dicodingsubmission2.models
 class DetailUser (
     var id: Int = 0,
     var login: String = "",
-    var avatar_url: String = "",
-    var html_url: String = "",
+    var avatarUrl: String = "",
+    var htmlUrl: String = "",
     var name: String? = "",
     var company: String? = "",
     var blog: String? = "",
